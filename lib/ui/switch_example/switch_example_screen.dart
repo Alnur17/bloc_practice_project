@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../bloc/switch_example/switch_bloc.dart';
+import '../../bloc/switch_example/switch_event.dart';
+import '../../bloc/switch_example/switch_state.dart';
 
 class SwitchExampleScreen extends StatelessWidget {
   const SwitchExampleScreen({super.key});
@@ -17,13 +22,38 @@ class SwitchExampleScreen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text('Notifications'),
-                Switch(value: true, onChanged: (value) {}),
+                BlocBuilder<SwitchBloc, SwitchState>(
+                  buildWhen: (previous, current) => previous.isSwitch != current.isSwitch,
+                  builder: (context, state) {
+                    print('notifications');
+                    return Switch(value: state.isSwitch, onChanged: (value) {
+                      print(value);
+                      context.read<SwitchBloc>().add(ToggleSwitch());
+                    });
+                  },
+                ),
               ],
             ),
             SizedBox(height: 20),
-            Container(height: 200, color: Colors.red.withOpacity(0.5)),
-            SizedBox(height: 20),
-            Slider(value: 0.4, onChanged: (value) {}),
+            BlocBuilder<SwitchBloc, SwitchState>(
+              buildWhen: (previous, current) => previous.slider != current.slider,
+              builder: (context, state) {
+                print('slider container');
+                return Container(
+                    height: 200, color: Colors.red.withOpacity(state.slider));
+              },
+            ),
+            SizedBox(height: 40),
+            BlocBuilder<SwitchBloc, SwitchState>(
+              buildWhen: (previous, current) => previous.slider != current.slider,
+              builder: (context, state) {
+                print('slider');
+                return Slider(value: state.slider, onChanged: (value) {
+                  print(value);
+                  context.read<SwitchBloc>().add(SliderEvent(sliderValue: value));
+                });
+              },
+            ),
           ],
         ),
       ),
