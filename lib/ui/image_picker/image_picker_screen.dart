@@ -19,22 +19,50 @@ class _ImagePickerScreenState extends State<ImagePickerScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text('Image Picker Example')),
-      body: Center(
-        child: BlocBuilder<ImagePickerBloc, ImagePickerState>(
-          buildWhen: (previous, current) => previous.file != current.file,
-          builder: (context, state) {
-            if (state.file == null) {
-              return InkWell(
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          BlocBuilder<ImagePickerBloc, ImagePickerState>(
+            buildWhen: (previous, current) => previous.file != current.file,
+            builder: (context, state) {
+              if (state.file == null) {
+                return CircleAvatar(
+                  radius: 120,
+                  child: Icon(Icons.person_pin, size: 100,),
+                );
+              } else {
+                return Image.file(
+                  File(state.file!.path.toString()),
+                );
+              }
+            },
+          ),
+
+          const SizedBox(height: 30),
+
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              InkWell(
                 onTap: () {
                   context.read<ImagePickerBloc>().add(CameraCapture());
                 },
-                child: CircleAvatar(child: Icon(Icons.camera)),
-              );
-            } else {
-              return Image.file(File(state.file!.path.toString()));
-            }
-          },
-        ),
+                child: CircleAvatar(
+                  child: Icon(Icons.camera_alt_outlined),
+                ),
+              ),
+              SizedBox(width: 20),
+              InkWell(
+                onTap: () {
+                  context.read<ImagePickerBloc>().add(GalleryImageCapture());
+                },
+                child: CircleAvatar(
+                  child: Icon(Icons.photo),
+                ),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }

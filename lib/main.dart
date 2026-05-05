@@ -1,8 +1,6 @@
 import 'package:block_practice_project/bloc/counter/counter_bloc.dart';
 import 'package:block_practice_project/bloc/switch_example/switch_bloc.dart';
-import 'package:block_practice_project/ui/counter/counter_screen.dart';
 import 'package:block_practice_project/ui/image_picker/image_picker_screen.dart';
-import 'package:block_practice_project/ui/switch_example/switch_example_screen.dart';
 import 'package:block_practice_project/utils/image_picker_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
